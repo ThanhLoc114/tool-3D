@@ -1,0 +1,5 @@
+import {local3DPlugin} from './scripts/local3d-plugin.mjs';
+import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
+export default defineConfig({plugins:[local3DPlugin()],worker:{format:'es'},build:{rolldownOptions:{input:{fruit:fileURLToPath(new URL('./fruit.html',import.meta.url)),lamp:fileURLToPath(new URL('./lamp.html',import.meta.url)),utilities:fileURLToPath(new URL('./print-tools.html',import.meta.url)),baby:fileURLToPath(new URL('./baby.html',import.meta.url)),qr:fileURLToPath(new URL('./qr.html',import.meta.url)),main:fileURLToPath(new URL('./index.html',import.meta.url)),image:fileURLToPath(new URL('./image.html',import.meta.url)),clicker:fileURLToPath(new URL('./clicker.html',import.meta.url))}}}});
+

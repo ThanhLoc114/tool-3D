@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+const listeners=new Map(),frames=new Map();let id=0,renders=0,updates=0;
+const events={addEventListener(type,fn){listeners.set(type,fn)}};
+globalThis.document={...events,hidden:false};globalThis.window=events;
+globalThis.requestAnimationFrame=fn=>{frames.set(++id,fn);return id};globalThis.cancelAnimationFrame=i=>frames.delete(i);
+let change;const controls={addEventListener(type,fn){change=fn},update(){updates++;if(updates<3)change()}};
+const renderer={domElement:events,render(){renders++}};
+const {renderWhenNeeded}=await import('../src/render-loop.js');const invalidate=renderWhenNeeded(renderer,{}, {},controls);
+const flush=()=>{const current=[...frames.values()];frames.clear();current.forEach(fn=>fn())};
+flush();flush();flush();assert.equal(frames.size,0);assert.equal(renders,2);const before=updates;flush();assert.equal(updates,before,'idle tool stops updating');
+invalidate();invalidate();assert.equal(frames.size,1,'coalesce invalidation');document.hidden=true;listeners.get('visibilitychange')();assert.equal(frames.size,0);invalidate();assert.equal(frames.size,0);document.hidden=false;listeners.get('visibilitychange')();flush();assert(renders>=3);console.log('PASS idle rendering, damping, coalescing and hidden/resumed tab');

@@ -1,0 +1,754 @@
+[
+  {
+    "id": "anton",
+    "file": "catalog/anton.ttf",
+    "label": "Anton",
+    "source": "https://github.com/google/fonts/tree/main/ofl/anton",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "archivo",
+    "file": "catalog/archivo.ttf",
+    "label": "Archivo",
+    "source": "https://github.com/google/fonts/tree/main/ofl/archivo",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "archivoblack",
+    "file": "catalog/archivoblack.ttf",
+    "label": "Archivo Black",
+    "source": "https://github.com/google/fonts/tree/main/ofl/archivoblack",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "asap",
+    "file": "catalog/asap.ttf",
+    "label": "Asap",
+    "source": "https://github.com/google/fonts/tree/main/ofl/asap",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "assistant",
+    "file": "catalog/assistant.ttf",
+    "label": "Assistant",
+    "source": "https://github.com/google/fonts/tree/main/ofl/assistant",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "barlow",
+    "file": "catalog/barlow.ttf",
+    "label": "Barlow",
+    "source": "https://github.com/google/fonts/tree/main/ofl/barlow",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "barlowcondensed",
+    "file": "catalog/barlowcondensed.ttf",
+    "label": "Barlow Condensed",
+    "source": "https://github.com/google/fonts/tree/main/ofl/barlowcondensed",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "bebasneue",
+    "file": "catalog/bebasneue.ttf",
+    "label": "Bebas Neue",
+    "source": "https://github.com/google/fonts/tree/main/ofl/bebasneue",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "bitter",
+    "file": "catalog/bitter.ttf",
+    "label": "Bitter",
+    "source": "https://github.com/google/fonts/tree/main/ofl/bitter",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "bungee",
+    "file": "catalog/bungee.ttf",
+    "label": "Bungee",
+    "source": "https://github.com/google/fonts/tree/main/ofl/bungee",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "cabin",
+    "file": "catalog/cabin.ttf",
+    "label": "Cabin",
+    "source": "https://github.com/google/fonts/tree/main/ofl/cabin",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "cairo",
+    "file": "catalog/cairo.ttf",
+    "label": "Cairo",
+    "source": "https://github.com/google/fonts/tree/main/ofl/cairo",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "catamaran",
+    "file": "catalog/catamaran.ttf",
+    "label": "Catamaran",
+    "source": "https://github.com/google/fonts/tree/main/ofl/catamaran",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "caveat",
+    "file": "catalog/caveat.ttf",
+    "label": "Caveat",
+    "source": "https://github.com/google/fonts/tree/main/ofl/caveat",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "chivo",
+    "file": "catalog/chivo.ttf",
+    "label": "Chivo",
+    "source": "https://github.com/google/fonts/tree/main/ofl/chivo",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "cinzel",
+    "file": "catalog/cinzel.ttf",
+    "label": "Cinzel",
+    "source": "https://github.com/google/fonts/tree/main/ofl/cinzel",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "comfortaa",
+    "file": "catalog/comfortaa.ttf",
+    "label": "Comfortaa",
+    "source": "https://github.com/google/fonts/tree/main/ofl/comfortaa",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "concertone",
+    "file": "catalog/concertone.ttf",
+    "label": "Concert One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/concertone",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "cookie",
+    "file": "catalog/cookie.ttf",
+    "label": "Cookie",
+    "source": "https://github.com/google/fonts/tree/main/ofl/cookie",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "courgette",
+    "file": "catalog/courgette.ttf",
+    "label": "Courgette",
+    "source": "https://github.com/google/fonts/tree/main/ofl/courgette",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "cousine",
+    "file": "catalog/cousine.ttf",
+    "label": "Cousine",
+    "source": "https://github.com/google/fonts/tree/main/ofl/cousine",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "crimsontext",
+    "file": "catalog/crimsontext.ttf",
+    "label": "Crimson Text",
+    "source": "https://github.com/google/fonts/tree/main/ofl/crimsontext",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "dancingscript",
+    "file": "catalog/dancingscript.ttf",
+    "label": "Dancing Script",
+    "source": "https://github.com/google/fonts/tree/main/ofl/dancingscript",
+    "vietnamese": true,
+    "group": "Viết tay"
+  },
+  {
+    "id": "dmsans",
+    "file": "catalog/dmsans.ttf",
+    "label": "DM Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/dmsans",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "dmserifdisplay",
+    "file": "catalog/dmserifdisplay.ttf",
+    "label": "DM Serif Display",
+    "source": "https://github.com/google/fonts/tree/main/ofl/dmserifdisplay",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "dosis",
+    "file": "catalog/dosis.ttf",
+    "label": "Dosis",
+    "source": "https://github.com/google/fonts/tree/main/ofl/dosis",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "exo",
+    "file": "catalog/exo.ttf",
+    "label": "Exo",
+    "source": "https://github.com/google/fonts/tree/main/ofl/exo",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "exo2",
+    "file": "catalog/exo2.ttf",
+    "label": "Exo 2",
+    "source": "https://github.com/google/fonts/tree/main/ofl/exo2",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "figtree",
+    "file": "catalog/figtree.ttf",
+    "label": "Figtree",
+    "source": "https://github.com/google/fonts/tree/main/ofl/figtree",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "fjallaone",
+    "file": "catalog/fjallaone.ttf",
+    "label": "Fjalla One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/fjallaone",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "frankruhllibre",
+    "file": "catalog/frankruhllibre.ttf",
+    "label": "Frank Ruhl Libre",
+    "source": "https://github.com/google/fonts/tree/main/ofl/frankruhllibre",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "greatvibes",
+    "file": "catalog/greatvibes.ttf",
+    "label": "Great Vibes",
+    "source": "https://github.com/google/fonts/tree/main/ofl/greatvibes",
+    "vietnamese": true,
+    "group": "Viết tay"
+  },
+  {
+    "id": "heebo",
+    "file": "catalog/heebo.ttf",
+    "label": "Heebo",
+    "source": "https://github.com/google/fonts/tree/main/ofl/heebo",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "hind",
+    "file": "catalog/hind.ttf",
+    "label": "Hind",
+    "source": "https://github.com/google/fonts/tree/main/ofl/hind",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "ibmplexsans",
+    "file": "catalog/ibmplexsans.ttf",
+    "label": "IBM Plex Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/ibmplexsans",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "ibmplexserif",
+    "file": "catalog/ibmplexserif.ttf",
+    "label": "IBM Plex Serif",
+    "source": "https://github.com/google/fonts/tree/main/ofl/ibmplexserif",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "inconsolata",
+    "file": "catalog/inconsolata.ttf",
+    "label": "Inconsolata",
+    "source": "https://github.com/google/fonts/tree/main/ofl/inconsolata",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "indieflower",
+    "file": "catalog/indieflower.ttf",
+    "label": "Indie Flower",
+    "source": "https://github.com/google/fonts/tree/main/ofl/indieflower",
+    "vietnamese": true,
+    "group": "Viết tay"
+  },
+  {
+    "id": "inter",
+    "file": "catalog/inter.ttf",
+    "label": "Inter",
+    "source": "https://github.com/google/fonts/tree/main/ofl/inter",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "josefinsans",
+    "file": "catalog/josefinsans.ttf",
+    "label": "Josefin Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/josefinsans",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "jost",
+    "file": "catalog/jost.ttf",
+    "label": "Jost",
+    "source": "https://github.com/google/fonts/tree/main/ofl/jost",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "kanit",
+    "file": "catalog/kanit.ttf",
+    "label": "Kanit",
+    "source": "https://github.com/google/fonts/tree/main/ofl/kanit",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "karla",
+    "file": "catalog/karla.ttf",
+    "label": "Karla",
+    "source": "https://github.com/google/fonts/tree/main/ofl/karla",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "kaushanscript",
+    "file": "catalog/kaushanscript.ttf",
+    "label": "Kaushan Script",
+    "source": "https://github.com/google/fonts/tree/main/ofl/kaushanscript",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "lato",
+    "file": "catalog/lato.ttf",
+    "label": "Lato",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lato",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "lemon",
+    "file": "catalog/lemon.ttf",
+    "label": "Lemon",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lemon",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "lemonada",
+    "file": "catalog/lemonada.ttf",
+    "label": "Lemonada",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lemonada",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "lexend",
+    "file": "catalog/lexend.ttf",
+    "label": "Lexend",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lexend",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "lobstertwo",
+    "file": "catalog/lobstertwo.ttf",
+    "label": "Lobster Two",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lobstertwo",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "lobster",
+    "file": "catalog/lobster.ttf",
+    "label": "Lobster",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lobster",
+    "vietnamese": true,
+    "group": "Viết tay"
+  },
+  {
+    "id": "lora",
+    "file": "catalog/lora.ttf",
+    "label": "Lora",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lora",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "merriweather",
+    "file": "catalog/merriweather.ttf",
+    "label": "Merriweather",
+    "source": "https://github.com/google/fonts/tree/main/ofl/merriweather",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "montserrat",
+    "file": "catalog/montserrat.ttf",
+    "label": "Montserrat",
+    "source": "https://github.com/google/fonts/tree/main/ofl/montserrat",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "mulish",
+    "file": "catalog/mulish.ttf",
+    "label": "Mulish",
+    "source": "https://github.com/google/fonts/tree/main/ofl/mulish",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "notoserif",
+    "file": "catalog/notoserif.ttf",
+    "label": "Noto Serif",
+    "source": "https://github.com/google/fonts/tree/main/ofl/notoserif",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "oswald",
+    "file": "catalog/oswald.ttf",
+    "label": "Oswald",
+    "source": "https://github.com/google/fonts/tree/main/ofl/oswald",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "outfit",
+    "file": "catalog/outfit.ttf",
+    "label": "Outfit",
+    "source": "https://github.com/google/fonts/tree/main/ofl/outfit",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "overpass",
+    "file": "catalog/overpass.ttf",
+    "label": "Overpass",
+    "source": "https://github.com/google/fonts/tree/main/ofl/overpass",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "oxygen",
+    "file": "catalog/oxygen.ttf",
+    "label": "Oxygen",
+    "source": "https://github.com/google/fonts/tree/main/ofl/oxygen",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "pacifico",
+    "file": "catalog/pacifico.ttf",
+    "label": "Pacifico",
+    "source": "https://github.com/google/fonts/tree/main/ofl/pacifico",
+    "vietnamese": true,
+    "group": "Viết tay"
+  },
+  {
+    "id": "passionone",
+    "file": "catalog/passionone.ttf",
+    "label": "Passion One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/passionone",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "patuaone",
+    "file": "catalog/patuaone.ttf",
+    "label": "Patua One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/patuaone",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "paytoneone",
+    "file": "catalog/paytoneone.ttf",
+    "label": "Paytone One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/paytoneone",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "playfairdisplay",
+    "file": "catalog/playfairdisplay.ttf",
+    "label": "Playfair Display",
+    "source": "https://github.com/google/fonts/tree/main/ofl/playfairdisplay",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "poppins",
+    "file": "catalog/poppins.ttf",
+    "label": "Poppins",
+    "source": "https://github.com/google/fonts/tree/main/ofl/poppins",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "prompt",
+    "file": "catalog/prompt.ttf",
+    "label": "Prompt",
+    "source": "https://github.com/google/fonts/tree/main/ofl/prompt",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "ptsans",
+    "file": "catalog/ptsans.ttf",
+    "label": "PT Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/ptsans",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "ptserif",
+    "file": "catalog/ptserif.ttf",
+    "label": "PT Serif",
+    "source": "https://github.com/google/fonts/tree/main/ofl/ptserif",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "rajdhani",
+    "file": "catalog/rajdhani.ttf",
+    "label": "Rajdhani",
+    "source": "https://github.com/google/fonts/tree/main/ofl/rajdhani",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "raleway",
+    "file": "catalog/raleway.ttf",
+    "label": "Raleway",
+    "source": "https://github.com/google/fonts/tree/main/ofl/raleway",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "righteous",
+    "file": "catalog/righteous.ttf",
+    "label": "Righteous",
+    "source": "https://github.com/google/fonts/tree/main/ofl/righteous",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "roboto",
+    "file": "catalog/roboto.ttf",
+    "label": "Roboto",
+    "source": "https://github.com/google/fonts/tree/main/ofl/roboto",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "robotocondensed",
+    "file": "catalog/robotocondensed.ttf",
+    "label": "Roboto Condensed",
+    "source": "https://github.com/google/fonts/tree/main/ofl/robotocondensed",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "rubik",
+    "file": "catalog/rubik.ttf",
+    "label": "Rubik",
+    "source": "https://github.com/google/fonts/tree/main/ofl/rubik",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "russoone",
+    "file": "catalog/russoone.ttf",
+    "label": "Russo One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/russoone",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "sacramento",
+    "file": "catalog/sacramento.ttf",
+    "label": "Sacramento",
+    "source": "https://github.com/google/fonts/tree/main/ofl/sacramento",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "shadowsintolight",
+    "file": "catalog/shadowsintolight.ttf",
+    "label": "Shadows Into Light",
+    "source": "https://github.com/google/fonts/tree/main/ofl/shadowsintolight",
+    "vietnamese": false,
+    "group": "Viết tay"
+  },
+  {
+    "id": "signika",
+    "file": "catalog/signika.ttf",
+    "label": "Signika",
+    "source": "https://github.com/google/fonts/tree/main/ofl/signika",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "slabo27px",
+    "file": "catalog/slabo27px.ttf",
+    "label": "Slabo 27px",
+    "source": "https://github.com/google/fonts/tree/main/ofl/slabo27px",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "sourcesans3",
+    "file": "catalog/sourcesans3.ttf",
+    "label": "Source Sans 3",
+    "source": "https://github.com/google/fonts/tree/main/ofl/sourcesans3",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "spacegrotesk",
+    "file": "catalog/spacegrotesk.ttf",
+    "label": "Space Grotesk",
+    "source": "https://github.com/google/fonts/tree/main/ofl/spacegrotesk",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "teko",
+    "file": "catalog/teko.ttf",
+    "label": "Teko",
+    "source": "https://github.com/google/fonts/tree/main/ofl/teko",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "titilliumweb",
+    "file": "catalog/titilliumweb.ttf",
+    "label": "Titillium Web",
+    "source": "https://github.com/google/fonts/tree/main/ofl/titilliumweb",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "urbanist",
+    "file": "catalog/urbanist.ttf",
+    "label": "Urbanist",
+    "source": "https://github.com/google/fonts/tree/main/ofl/urbanist",
+    "vietnamese": false,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "varelaround",
+    "file": "catalog/varelaround.ttf",
+    "label": "Varela Round",
+    "source": "https://github.com/google/fonts/tree/main/ofl/varelaround",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "vollkorn",
+    "file": "catalog/vollkorn.ttf",
+    "label": "Vollkorn",
+    "source": "https://github.com/google/fonts/tree/main/ofl/vollkorn",
+    "vietnamese": true,
+    "group": "Có chân"
+  },
+  {
+    "id": "worksans",
+    "file": "catalog/worksans.ttf",
+    "label": "Work Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/worksans",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "yanonekaffeesatz",
+    "file": "catalog/yanonekaffeesatz.ttf",
+    "label": "Yanone Kaffeesatz",
+    "source": "https://github.com/google/fonts/tree/main/ofl/yanonekaffeesatz",
+    "vietnamese": true,
+    "group": "Đậm / trang trí"
+  },
+  {
+    "id": "zillaslab",
+    "file": "catalog/zillaslab.ttf",
+    "label": "Zilla Slab",
+    "source": "https://github.com/google/fonts/tree/main/ofl/zillaslab",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "abel",
+    "file": "catalog/abel.ttf",
+    "label": "Abel",
+    "source": "https://github.com/google/fonts/tree/main/ofl/abel",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "abrilfatface",
+    "file": "catalog/abrilfatface.ttf",
+    "label": "Abril Fatface",
+    "source": "https://github.com/google/fonts/tree/main/ofl/abrilfatface",
+    "vietnamese": false,
+    "group": "Có chân"
+  },
+  {
+    "id": "acme",
+    "file": "catalog/acme.ttf",
+    "label": "Acme",
+    "source": "https://github.com/google/fonts/tree/main/ofl/acme",
+    "vietnamese": false,
+    "group": "Không chân"
+  },
+  {
+    "id": "alata",
+    "file": "catalog/alata.ttf",
+    "label": "Alata",
+    "source": "https://github.com/google/fonts/tree/main/ofl/alata",
+    "vietnamese": true,
+    "group": "Không chân"
+  },
+  {
+    "id": "alfaslabone",
+    "file": "catalog/alfaslabone.ttf",
+    "label": "Alfa Slab One",
+    "source": "https://github.com/google/fonts/tree/main/ofl/alfaslabone",
+    "vietnamese": true,
+    "group": "Không chân"
+  }
+]

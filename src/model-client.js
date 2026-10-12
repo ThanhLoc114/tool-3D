@@ -1,0 +1,7 @@
+import * as THREE from 'three';
+const worker=new Worker(new URL('./model-worker.js',import.meta.url),{type:'module'});
+let sequence=0,active=null,pending=null;
+function send(job){active=job;worker.postMessage({id:job.id,...job.payload})}
+worker.onmessage=({data})=>{const job=active;if(!job||job.id!==data.id)return;active=null;if(pending){job.resolve(null);const next=pending;pending=null;send(next);return}if(data.error){job.reject(Error(data.error));return}const result=data.result;result.meshes=result.meshes.map(item=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(item.position,3));g.setAttribute('normal',new THREE.BufferAttribute(item.normal,3));if(item.index)g.setIndex(new THREE.BufferAttribute(item.index,1));const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:item.color,roughness:.65}));m.name=item.name;m.userData=item.userData;m.castShadow=m.receiveShadow=true;return m});job.resolve(result);document.dispatchEvent(new Event('keycraft:model'))};
+worker.onerror=()=>{active?.reject(Error('Không khởi chạy được bộ dựng 3D. Tải lại trang để thử lại.'));pending?.reject(Error('Bộ dựng 3D bị dừng.'));active=pending=null};
+export function requestModel(payload){return new Promise((resolve,reject)=>{const job={id:++sequence,payload,resolve:result=>{if(result?.qr?.modules){const m=result.qr.modules;m.get=(row,col)=>m.data[row*m.size+col]}resolve(result)},reject};if(active){pending?.resolve(null);pending=job}else send(job)})}

@@ -1,0 +1,30 @@
+{
+  "name": "keycraft-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node tests/parameter-controls.mjs && node tests/geometry.mjs",
+    "test:image": "node tests/image-tool.mjs",
+    "test:studio": "node tests/model-client.mjs && node tests/print-tools.mjs && node tests/qr-tool.mjs && node tests/baby-tool.mjs && node tests/clicker-shell.mjs",
+    "test:lamp": "node tests/lamp-tool.mjs",
+    "test:all": "node scripts/audit-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "clipper-lib": "^6.4.2",
+    "jsqr": "^1.4.0",
+    "jszip": "^3.10.2",
+    "manifold-3d": "^3.5.4",
+    "opentype.js": "^2.0.0",
+    "qrcode": "^1.5.4",
+    "tesseract.js": "^7.0.0",
+    "three": "^0.186.1"
+  }
+}
