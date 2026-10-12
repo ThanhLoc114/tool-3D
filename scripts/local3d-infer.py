@@ -47,7 +47,7 @@ print('STATUS:AI đang dựng hình mọi phía trên CPU; có thể mất vài 
 with torch.no_grad():
     codes = model([image], device='cpu')
 print('STATUS:Đang trích xuất bề mặt 3D…', flush=True)
-mesh = model.extract_mesh(codes, False, resolution=128)[0]
+mesh = model.extract_mesh(codes, False, resolution=192)[0]
 if not len(mesh.vertices) or not len(mesh.faces):
     raise ValueError('AI chưa tìm được vật thể. Dùng ảnh vật thể rõ và nền đơn giản.')
 mesh.remove_unreferenced_vertices()
@@ -55,6 +55,8 @@ mesh.remove_unreferenced_vertices()
 components = mesh.split(only_watertight=False)
 if len(components) > 1:
     mesh = max(components, key=lambda part: part.area)
+print('STATUS:Làm mịn bề mặt, giữ hình khối và chi tiết…', flush=True)
+trimesh.smoothing.filter_taubin(mesh, lamb=0.5, nu=0.53, iterations=6)
 trimesh.repair.fill_holes(mesh)
 mesh.fix_normals()
 mesh = to_gradio_3d_orientation(mesh)
