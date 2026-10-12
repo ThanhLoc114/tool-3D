@@ -2,6 +2,7 @@ const fonts=new Map();
 self.onmessage=async({data})=>{try{const {id,kind,settings,analysis,preview,fontName}=data;let result;
 if(kind==='baby'){const [{buildBabyModel},{default:opentype}]=await Promise.all([import('./baby-model.js'),import('opentype.js')]);if(!fonts.has(fontName)){const res=await fetch('/fonts/'+fontName+'.ttf');if(!res.ok)throw Error('Không tải được phông chữ.');fonts.set(fontName,opentype.parse(await res.arrayBuffer()))}if(!fonts.has('NotoSans-Bold')){const res=await fetch('/fonts/NotoSans-Bold.ttf');if(!res.ok)throw Error('Không tải được phông tiếng Việt.');fonts.set('NotoSans-Bold',opentype.parse(await res.arrayBuffer()))}result=buildBabyModel(fonts.get(fontName),settings,fonts.get('NotoSans-Bold'))}
 else if(kind==='fruit'){const {buildFruitModel}=await import('./fruit-model.js');result=buildFruitModel(settings)}
+else if(kind==='soften'){const {buildSoftenedModel}=await import('./imported-surface.js');result=buildSoftenedModel(settings)}
 else if(kind==='lamp'){const {buildLampModel}=await import('./lamp-model.js');result=buildLampModel(settings)}
 else if(kind==='qr'){const {buildQRModel}=await import('./qr-model.js');result=buildQRModel(data.text,settings)}
 else if(kind==='clicker'){const {buildClickerModel}=await import('./clicker-model.js');result=buildClickerModel(analysis,settings,preview)}

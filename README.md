@@ -128,3 +128,5 @@ AI từ ảnh cần hoàn thành cài đặt/trọng số và kiểm chứng Tri
 ### AI cục bộ đã kiểm chứng
 TripoSR đã chạy thử ảnh ghế và hamburger qua API local; đầu ra GLB được kiểm tra bề mặt kín và đọc bằng GLTFLoader của giao diện. Trọng số, cấu hình DINO và u2netp lưu trong `.local-ai/`; sau cài đặt và kiểm chứng, API dùng Hugging Face cache ở chế độ offline. Khâu hậu xử lý bỏ mảnh rời nhỏ bằng cách giữ khối có diện tích lớn nhất, vá lỗ nhỏ và sửa hướng mặt. Chi tiết rời chủ ý có thể bị bỏ; dùng ảnh một vật thể liền khối. AI ước đoán mặt khuất, không đảm bảo giống hoàn toàn ảnh hoặc tự tạo kết cấu in chính xác.
 Trên máy khác, chạy script setup để tải model và kiểm chứng; GitHub không chứa trọng số 1.56 GiB hoặc môi trường Python. Dùng trang `lamp.html`, tải PNG/JPG, bấm Tạo 3D bằng AI cục bộ. Chạy CPU nên cần chờ; có nút dừng và tiếp tục theo dõi sau khi tải lại trang.
+
+Trang đèn có thanh Làm mịn bề mặt 0–40: Taubin trong worker, giữ kích thước bao và áp dụng vào STL/3MF. AI mới mặc định 18, mô hình nhập giữ nguyên mức 0. Chỉnh trước khi khoét hốc. Mức mạnh làm mờ chi tiết; không phục hồi chi tiết AI dựng sai.
