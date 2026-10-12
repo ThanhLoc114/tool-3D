@@ -23,6 +23,7 @@ from tsr.system import TSR
 from tsr.utils import remove_background, resize_foreground, to_gradio_3d_orientation
 from PIL import Image
 import rembg
+import trimesh
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--image', required=True)
@@ -47,8 +48,16 @@ with torch.no_grad():
     codes = model([image], device='cpu')
 print('STATUS:Đang trích xuất bề mặt 3D…', flush=True)
 mesh = model.extract_mesh(codes, False, resolution=128)[0]
+if not len(mesh.vertices) or not len(mesh.faces):
+    raise ValueError('AI chưa tìm được vật thể. Dùng ảnh vật thể rõ và nền đơn giản.')
 mesh.remove_unreferenced_vertices()
+# Drop disconnected reconstruction speckles; retain the main physical object.
+components = mesh.split(only_watertight=False)
+if len(components) > 1:
+    mesh = max(components, key=lambda part: part.area)
+trimesh.repair.fill_holes(mesh)
 mesh.fix_normals()
 mesh = to_gradio_3d_orientation(mesh)
+Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 mesh.export(args.output)
 print('STATUS:Đã hoàn tất mô hình 3D.', flush=True)

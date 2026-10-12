@@ -19,4 +19,4 @@ Set-Content -LiteralPath '.local-ai/ready.json' -Value '{"engine":"TripoSR","dev
 if ($LASTEXITCODE -ne 0) { throw 'Chưa tải xong trọng số. Chạy lại setup để tiếp tục.' }
 & powershell -NoProfile -File scripts/verify-local3d.ps1
 if ($LASTEXITCODE -ne 0) { throw 'Kiểm tra AI chưa đạt; xem nhật ký.' }
-Write-Output 'AI cục bộ đã sẵn sàng. Lần tạo đầu tải trọng số; ảnh không rời máy.'
+Write-Output 'AI cục bộ đã được kiểm chứng và sẵn sàng. Trọng số lưu trên máy; ảnh không rời máy.'
