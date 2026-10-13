@@ -129,6 +129,10 @@ if not np.isfinite(mesh.vertices).all(): raise ValueError('Bề mặt có tọa 
 if not mesh.is_watertight: raise ValueError('AI tạo bề mặt chưa kín; dùng ảnh một vật thể rõ hơn để dựng lại.')
 output=Path(args.output)
 output.parent.mkdir(parents=True,exist_ok=True)
+from local3d_surface import clean_surface
+mesh.export(output.with_suffix('.raw.glb'),file_type='glb')
+mesh,surface_report=clean_surface(mesh,status)
+output.with_suffix('.surface.json').write_text(json.dumps(surface_report),encoding='utf-8')
 temp=output.with_suffix('.glb.tmp')
 mesh.export(str(temp),file_type='glb')
 temp.replace(output)

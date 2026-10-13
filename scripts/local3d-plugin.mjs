@@ -69,7 +69,7 @@ export function local3DPlugin(){
      job.state='cancelled';job.message='Đã dừng AI.';if(active===job.id)active=null;save(job);return send(200,{state:job.state});
     }
     if(match[2]){if(job.state!=='succeeded')return send(409,{error:'Mô hình chưa hoàn tất.'});res.setHeader('Content-Type','model/gltf-binary');createReadStream(path.join(job.folder,'model.glb')).pipe(res);return}
-    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message});
+    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message,surfaceCleaned:readJSON(path.join(job.folder,'model.surface.json'))?.version===1});
    }catch(e){send(500,{error:e.message})}
   });
  }};

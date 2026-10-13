@@ -31,5 +31,8 @@ try{
  await mkdir(done,{recursive:true});await writeFile(path.join(done,'engine.json'),JSON.stringify({engine:'hunyuan'}));await writeFile(path.join(done,'model.glb'),'fixture');
  local3DPlugin().configureServer({config:{root,server:{port:5174}},middlewares:{use(prefix,fn){middleware=fn}}});
  const recovered=await request('/jobs/'+complete);assert.equal(recovered.state,'succeeded');assert.equal(recovered.engine,'hunyuan');
+ assert.equal(recovered.surfaceCleaned,false);
+ await writeFile(path.join(done,'model.surface.json'),JSON.stringify({version:1}));
+ assert.equal((await request('/jobs/'+complete)).surfaceCleaned,true,'Report physical cleanup for restored jobs');
  console.log('PASS: engines fail closed before verification, validate selections, and restrict local origins.');
 }finally{await rm(root,{recursive:true,force:true})}
