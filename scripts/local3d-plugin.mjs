@@ -6,6 +6,11 @@ import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 const uuid=/^[a-f0-9-]{36}$/;
 function readJSON(file){try{return JSON.parse(readFileSync(file,'utf8'))}catch{return null}}
+function meshError(text){
+ if(text.includes('thiếu một vùng lớn'))return 'AI dựng thiếu một vùng lớn. Không thể tự vá mà giữ đúng hình dáng; thử ảnh rõ hơn, một vật thể riêng biệt. Lưới gốc đã được lưu trên máy.';
+ if(text.includes('vẫn chưa kín')||text.includes('bề mặt chưa kín'))return 'AI đã chạy nhưng lưới vẫn chưa kín sau bước sửa nên chưa thể xuất để in. Thử ảnh rõ hơn, một vật thể riêng biệt.';
+ return null;
+}
 function alive(pid){if(!Number.isInteger(pid)||pid<=0)return false;try{process.kill(pid,0);return true}catch{return false}}
 async function ownsProcess(job){
  const pid=job.child?.pid||job.pid;if(!alive(pid))return false;
@@ -28,7 +33,7 @@ export function local3DPlugin(){
    if(!job){const saved=readJSON(path.join(folder,'job.json')),engine=readJSON(path.join(folder,'engine.json'))?.engine||'tripo';if(!saved&&!existsSync(path.join(folder,'model.glb')))return null;job={...saved,id,engine:saved?.engine||engine,folder};jobs.set(id,job)}
    if(existsSync(path.join(folder,'model.glb'))){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}
    else if(job.state==='running'&&!alive(job.pid)){job.state='failed';job.message='Tiến trình AI đã dừng trước khi hoàn tất. Tạo lại từ ảnh.';save(job)}
-   if(job.state==='failed'&&readJSON(path.join(job.folder,'job.json'))?.state==='failed'){try{if(readFileSync(path.join(job.folder,'error.log'),'utf8').includes('bề mặt chưa kín'))job.message='AI đã chạy nhưng mô hình từ ảnh này chưa kín nên không thể xuất để in. Thử ảnh rõ hơn, một vật thể riêng biệt.'}catch{}}
+   if(job.state==='failed'&&readJSON(path.join(job.folder,'job.json'))?.state==='failed'){try{job.message=meshError(readFileSync(path.join(job.folder,'error.log'),'utf8'))||job.message}catch{}}
    return job;
   }
   async function runningJob(){if(!existsSync(cache))return null;for(const id of await readdir(cache)){if(!uuid.test(id))continue;const job=getJob(id);if(job?.state==='running'){if(await ownsProcess(job)){active=id;return id}job.state='failed';job.message='Tiến trình AI cũ không còn chạy.';save(job)}}active=null;return null}
@@ -56,7 +61,7 @@ export function local3DPlugin(){
      child.stdout.on('data',data=>{stdout+=data;const lines=stdout.split('\n');stdout=lines.pop();for(const line of lines)if(line.startsWith('STATUS:')){job.message=line.slice(7).trim();save(job)}});
      child.stderr.on('data',data=>{stderr=(stderr+data).slice(-4000)});
      child.on('error',e=>{job.state='failed';job.message='Không khởi chạy được Python AI: '+e.message;if(active===id)active=null;save(job)});
-     child.on('close',async code=>{if(['cancelled','cancelling'].includes(job.state)){job.state='cancelled';job.message='Đã dừng AI.'}else if(code===0&&existsSync(output)){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}else{job.state='failed';job.message=stderr.includes('bề mặt chưa kín')?'AI đã chạy nhưng mô hình từ ảnh này chưa kín nên không thể xuất để in. Thử ảnh rõ hơn, một vật thể riêng biệt.':'AI xử lý thất bại. Chi tiết nằm trong nhật ký .local-ai/jobs/'+id+'/error.log';await writeFile(path.join(folder,'error.log'),stderr)}if(active===id)active=null;save(job)});
+     child.on('close',async code=>{if(['cancelled','cancelling'].includes(job.state)){job.state='cancelled';job.message='Đã dừng AI.'}else if(code===0&&existsSync(output)){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}else{job.state='failed';job.message=meshError(stderr)||'AI xử lý thất bại. Chi tiết nằm trong nhật ký .local-ai/jobs/'+id+'/error.log';await writeFile(path.join(folder,'error.log'),stderr)}if(active===id)active=null;save(job)});
      return send(202,{id});
     }
     const match=url.match(/^\/jobs\/([a-f0-9-]{36})(\/model)?$/);
