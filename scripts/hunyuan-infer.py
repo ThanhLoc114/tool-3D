@@ -25,6 +25,7 @@ from accelerate import init_empty_weights
 from safetensors import safe_open
 import yaml
 from local3d_cache import cache_key,read_latents,write_latents
+from hunyuan_cpu import surface_kv_cache
 volume_decoders.tqdm=lambda iterable,**kwargs: iterable
 
 p=argparse.ArgumentParser()
@@ -58,7 +59,8 @@ class ProgressVolumeDecoder(HierarchicalVolumeDecoding):
                 status(f'Trích xuất bề mặt: đã xử lý {count:,} điểm mẫu…')
                 next_report=(count//65536+1)*65536
             return geo_decoder(**inputs)
-        return super().__call__(latents,decode,**kwargs)
+        with surface_kv_cache(geo_decoder):
+            return super().__call__(latents,decode,**kwargs)
 status('Tách nền trên máy…')
 image=Image.open(args.image).convert('RGBA')
 if image.width*image.height>40_000_000: raise ValueError('Ảnh quá lớn.')

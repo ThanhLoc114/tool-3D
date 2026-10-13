@@ -153,3 +153,11 @@ Trạng thái AI xuất hiện ngay cạnh nút tạo và trên khung 3D: bướ
 Hunyuan kiểm tra và loại mảnh tạp rời trước khi xét độ kín, tự vá các lỗ nhỏ và sửa cạnh lỗi. Vùng thiếu lớn vẫn bị từ chối để tránh tạo hình sai; lưới gốc được giữ trong `.raw.glb` và kết quả sửa ghi vào `.repair.json`. Đã kiểm chứng ảnh Goku: loại 6 mảnh tạp, tạo lưới kín và xuất 3MF qua giao diện. Mô hình có thể gồm nhiều khối kín; bước này không bảo đảm tất cả bộ phận đã hợp nhất thành một khối.
 
 Chọn xử lý bề mặt Hunyuan: **Giữ chi tiết** giữ nguyên tessellation và dùng 6 lượt Taubin; **Mềm mịn** giữ quy trình remesh và 30 lượt. Giữ chi tiết là mặc định trên giao diện cho tác vụ mới, có thể còn gợn từ AI. Trên lưới Goku đã sửa, hậu xử lý nhẹ mất khoảng 3,2 giây và vẫn kín. Không phải thời gian dựng AI tổng; trích xuất CPU vẫn mất nhiều phút. Chế độ này giảm biến dạng do lọc, không khôi phục chi tiết bị thiếu trong suy luận.
+
+Bản xử lý bề mặt v3: chế độ Giữ chi tiết bảo vệ các đỉnh trên cạnh có góc giữa hai mặt lớn hơn 40°, giảm tác động lọc tại cạnh còn 15%. Giữ topology, kiểm tra hữu hạn/độ kín và kích thước sau lọc. Không suy diễn thêm chi tiết AI thiếu.
+
+API tự đối chiếu SHA256 của ảnh cùng engine/độ phân giải/chế độ/phiên bản xử lý. Cùng thiết lập trả lại tác vụ đã hoàn tất; đổi cách lọc dùng lưới `.raw.glb` qua tiến trình nhỏ, không nạp AI. Thử thực tế: trả kết quả cây thông đã lưu trong 91 ms (chưa tính tải GLB/hiển thị); xử lý lại Goku mất 2,66 giây. Yêu cầu khởi chạy được khóa để tránh hai ảnh chạy đồng thời; cache attention chỉ tồn tại trong một lần trích xuất và được xóa cả khi lỗi.
+
+Tối ưu trích xuất CPU: dùng cache phép chiếu cross-attention có sẵn trong upstream, không đổi trọng số, độ phân giải hay logits. Thử với VAE và trọng số thật, 4 lô 512 điểm: 0,613 → 0,511 giây (khoảng 20% trên mẫu này); không khẳng định toàn bộ suy luận nhanh hơn cùng tỷ lệ. Cây thông ở mức 255: 532.934 tam giác, một khối kín, xuất 3MF qua giao diện thành công. Ảnh mới vẫn có thể mất nhiều phút và chi tiết nhỏ/mặt khuất còn phụ thuộc mô hình AI.
+
+Kiểm chứng thêm: `node tests/local-ai-reuse.mjs`, Python môi trường Hunyuan chạy `tests/hunyuan-cpu.py` và `tests/ai-surface.py`.

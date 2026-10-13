@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import numpy as np
 import trimesh
-from local3d_surface import clean_surface
+from local3d_surface import clean_surface,feature_weights
 
 sphere=trimesh.creation.icosphere(subdivisions=4,radius=20)
 rng=np.random.default_rng(42)
@@ -29,3 +29,7 @@ assert np.allclose(detail.bounds,sphere.bounds,atol=1e-8)
 assert detail_report['profile']=='detail'
 assert rough(detail)<rough(sphere), "Gentle filtering must still reduce noise"
 print('PASS: detail mode keeps tessellation, closed geometry and size while filtering more gently.')
+
+assert np.all(feature_weights(trimesh.creation.box())==.15)
+assert np.all(feature_weights(trimesh.creation.icosphere(subdivisions=3))==1)
+print("PASS: protects crease vertices while allowing denoising on smooth curves.")

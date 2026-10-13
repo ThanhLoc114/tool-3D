@@ -3,6 +3,14 @@ import numpy as np
 import pymeshlab as pm
 import trimesh
 
+def feature_weights(mesh):
+    # Protect edges where adjacent faces meet at a real crease. Broad curved
+    # regions still receive the full denoising displacement.
+    weights=np.ones(len(mesh.vertices))
+    creases=mesh.face_adjacency_edges[mesh.face_adjacency_angles>np.deg2rad(40)]
+    if len(creases): weights[np.unique(creases)]=.15
+    return weights
+
 def clean_surface(source, status=lambda text: None, profile="balanced"):
     if profile not in ("balanced","detail"): raise ValueError("Chế độ bề mặt không hợp lệ.")
     mesh=source.copy()
@@ -30,11 +38,14 @@ def clean_surface(source, status=lambda text: None, profile="balanced"):
     surfaces.apply_filter('apply_coord_taubin_smoothing',stepsmoothnum=6 if profile=="detail" else 30,lambda_=.5,mu=-.53)
     result=surfaces.current_mesh()
     cleaned=trimesh.Trimesh(result.vertex_matrix(),result.face_matrix())
+    if profile=="detail":
+        if len(cleaned.vertices)!=len(mesh.vertices): raise ValueError("Lọc chi tiết thay đổi thứ tự lưới không hợp lệ.")
+        cleaned.vertices=mesh.vertices+(cleaned.vertices-mesh.vertices)*feature_weights(mesh)[:,None]
     cleaned.fix_normals()
     if not np.isfinite(cleaned.vertices).all() or np.any(cleaned.extents<=0) or not cleaned.is_watertight:
         raise ValueError('Làm sạch tạo bề mặt không hợp lệ; mô hình gốc được giữ lại.')
     cleaned.vertices=(cleaned.vertices-cleaned.bounds[0])*dimensions/cleaned.extents+bounds[0]
-    return cleaned,{'version':2,'profile':profile,'removed_components':len(parts)-len(kept),
+    return cleaned,{'version':3,'profile':profile,'removed_components':len(parts)-len(kept),
         'faces_before':len(source.faces),'faces_after':len(cleaned.faces),'watertight':True}
 
 if __name__=='__main__':
