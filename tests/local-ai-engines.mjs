@@ -9,8 +9,8 @@ let middleware;
 local3DPlugin().configureServer({config:{root,server:{port:5174}},middlewares:{use(prefix,fn){middleware=fn}}});
 async function request(url,method='GET',origin){
  const req=Readable.from([]);Object.assign(req,{url,method,headers:origin?{origin}:{}});
- let body;const res={setHeader(){},end(value){body=JSON.parse(value)}};
- await middleware(req,res,()=>{});return {code:res.statusCode,...body};
+ let body;const headers={};const res={setHeader(key,value){headers[key]=value},end(value){body=JSON.parse(value)}};
+ await middleware(req,res,()=>{});return {code:res.statusCode,headers,...body};
 }
 try{
  assert.equal((await request('/ready')).ready,false);
@@ -34,5 +34,7 @@ try{
  assert.equal(recovered.surfaceCleaned,false);
  await writeFile(path.join(done,'model.surface.json'),JSON.stringify({version:1}));
  assert.equal((await request('/jobs/'+complete)).surfaceCleaned,true,'Report physical cleanup for restored jobs');
+ await writeFile(path.join(done,'model.surface.json'),JSON.stringify({version:2}));
+ const updated=await request('/jobs/'+complete);assert.equal(updated.surfaceRevision,2);assert.equal(updated.surfaceCleaned,true);assert.equal(updated.headers['Cache-Control'],'no-store');
  console.log('PASS: engines fail closed before verification, validate selections, and restrict local origins.');
 }finally{await rm(root,{recursive:true,force:true})}

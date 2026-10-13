@@ -33,7 +33,7 @@ export function local3DPlugin(){
   async function runningJob(){if(!existsSync(cache))return null;for(const id of await readdir(cache)){if(!uuid.test(id))continue;const job=getJob(id);if(job?.state==='running'){if(await ownsProcess(job)){active=id;return id}job.state='failed';job.message='Tiến trình AI cũ không còn chạy.';save(job)}}active=null;return null}
   function engines(){const verified=readJSON(path.join(root,'.local-ai/hunyuan-verified.json')),complete=readJSON(path.join(root,'.local-ai/models/Hunyuan3D-2mini/complete.json'));const weight=path.join(root,'.local-ai/models/Hunyuan3D-2mini/hunyuan3d-dit-v2-mini-turbo/model.fp16.safetensors');return {tripo:existsSync(pythonFor('tripo'))&&existsSync(path.join(root,'.local-ai/ready.json'))&&existsSync(path.join(root,'.local-ai/verified.json'))&&existsSync(path.join(root,'.local-ai/models/TripoSR/complete.json')),hunyuan:existsSync(pythonFor('hunyuan'))&&existsSync(weight)&&statSync(weight).size===3822584202&&verified?.engine==='Hunyuan3D-2mini-Turbo'&&verified.watertight===true&&complete?.sha256==='bdbcef30dd0149a281e17d5b5b1fdad1122c904e098a42f3100e04e03c247bc4'}}
   server.middlewares.use('/api/local3d',async(req,res)=>{
-   const send=(code,data)=>{res.statusCode=code;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data))};
+   const send=(code,data)=>{res.statusCode=code;res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data))};
    try{
     const origins=['http://127.0.0.1:5174','http://localhost:5174','http://127.0.0.1:'+server.config.server.port,'http://localhost:'+server.config.server.port];
     if(req.headers.origin&&!origins.includes(req.headers.origin))return send(403,{error:'Chỉ nhận yêu cầu từ tool trên máy.'});
@@ -68,8 +68,8 @@ export function local3DPlugin(){
      if(alive(pid)){try{if(process.platform==='win32')await promisify(execFile)('taskkill',['/PID',String(pid),'/T','/F'],{windowsHide:true});else process.kill(pid,'SIGTERM')}catch(e){if(alive(pid)){job.state='running';save(job);throw Error('Chưa dừng được tiến trình AI: '+e.message)}}}
      job.state='cancelled';job.message='Đã dừng AI.';if(active===job.id)active=null;save(job);return send(200,{state:job.state});
     }
-    if(match[2]){if(job.state!=='succeeded')return send(409,{error:'Mô hình chưa hoàn tất.'});res.setHeader('Content-Type','model/gltf-binary');createReadStream(path.join(job.folder,'model.glb')).pipe(res);return}
-    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message,surfaceCleaned:readJSON(path.join(job.folder,'model.surface.json'))?.version===1});
+    if(match[2]){if(job.state!=='succeeded')return send(409,{error:'Mô hình chưa hoàn tất.'});const report=readJSON(path.join(job.folder,'model.surface.json')),name=report?.file==='model.cleaned.glb'&&existsSync(path.join(job.folder,'model.cleaned.glb'))?'model.cleaned.glb':'model.glb';res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type','model/gltf-binary');const stream=createReadStream(path.join(job.folder,name));res.on('close',()=>stream.destroy());stream.on('error',()=>res.destroy());stream.pipe(res);return}
+    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message,surfaceCleaned:(readJSON(path.join(job.folder,'model.surface.json'))?.version||0)>=1,surfaceRevision:readJSON(path.join(job.folder,'model.surface.json'))?.version||0});
    }catch(e){send(500,{error:e.message})}
   });
  }};

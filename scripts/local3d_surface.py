@@ -32,7 +32,7 @@ def clean_surface(source, status=lambda text: None):
     if not np.isfinite(cleaned.vertices).all() or np.any(cleaned.extents<=0) or not cleaned.is_watertight:
         raise ValueError('Làm sạch tạo bề mặt không hợp lệ; mô hình gốc được giữ lại.')
     cleaned.vertices=(cleaned.vertices-cleaned.bounds[0])*dimensions/cleaned.extents+bounds[0]
-    return cleaned,{'version':1,'removed_components':len(parts)-len(kept),
+    return cleaned,{'version':2,'removed_components':len(parts)-len(kept),
         'faces_before':len(source.faces),'faces_after':len(cleaned.faces),'watertight':True}
 
 if __name__=='__main__':
@@ -50,8 +50,12 @@ if __name__=='__main__':
     output.parent.mkdir(parents=True,exist_ok=True)
     original=output.with_suffix('.raw.glb')
     if not original.exists(): source.export(original,file_type='glb')
-    temp=output.with_suffix('.glb.tmp')
+    # An older preview may still be reading the original on Windows. Keep its
+    # file intact and publish a separate cleaned GLB through the report.
+    destination=output.with_suffix('.cleaned.glb') if output.exists() else output
+    if destination!=output: report['file']=destination.name
+    temp=destination.with_suffix('.glb.tmp')
     cleaned.export(temp,file_type='glb')
-    temp.replace(output)
+    temp.replace(destination)
     output.with_suffix('.surface.json').write_text(json.dumps(report),encoding='utf-8')
     print('PASS:',report)
