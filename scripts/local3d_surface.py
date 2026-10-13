@@ -3,7 +3,8 @@ import numpy as np
 import pymeshlab as pm
 import trimesh
 
-def clean_surface(source, status=lambda text: None):
+def clean_surface(source, status=lambda text: None, profile="balanced"):
+    if profile not in ("balanced","detail"): raise ValueError("Chế độ bề mặt không hợp lệ.")
     mesh=source.copy()
     if not np.isfinite(mesh.vertices).all() or np.any(mesh.extents<=0):
         raise ValueError('Bề mặt đầu vào không hợp lệ.')
@@ -18,21 +19,22 @@ def clean_surface(source, status=lambda text: None):
     bounds=mesh.bounds.copy()
     dimensions=mesh.extents.copy()
     edge=dimensions[0]*.8/120
-    status('Tái chia đều lưới để loại tam giác mảnh và gợn ở khớp nối…')
     surfaces=pm.MeshSet()
     surfaces.add_mesh(pm.Mesh(mesh.vertices,mesh.faces))
-    surfaces.apply_filter('meshing_isotropic_explicit_remeshing',iterations=5,
-        targetlen=pm.PureValue(edge),featuredeg=100,checksurfdist=True,
-        maxsurfdist=pm.PureValue(edge),reprojectflag=False)
-    status('Lọc gợn bề mặt trên lưới mới; giữ kích thước mô hình…')
-    surfaces.apply_filter('apply_coord_taubin_smoothing',stepsmoothnum=30,lambda_=.5,mu=-.53)
+    if profile=="balanced":
+        status('Tái chia đều lưới để loại tam giác mảnh và gợn ở khớp nối…')
+        surfaces.apply_filter('meshing_isotropic_explicit_remeshing',iterations=5,
+            targetlen=pm.PureValue(edge),featuredeg=100,checksurfdist=True,
+            maxsurfdist=pm.PureValue(edge),reprojectflag=False)
+    status('Lọc nhẹ để giữ nét nhỏ…' if profile=="detail" else 'Lọc gợn bề mặt trên lưới mới; giữ kích thước mô hình…')
+    surfaces.apply_filter('apply_coord_taubin_smoothing',stepsmoothnum=6 if profile=="detail" else 30,lambda_=.5,mu=-.53)
     result=surfaces.current_mesh()
     cleaned=trimesh.Trimesh(result.vertex_matrix(),result.face_matrix())
     cleaned.fix_normals()
     if not np.isfinite(cleaned.vertices).all() or np.any(cleaned.extents<=0) or not cleaned.is_watertight:
         raise ValueError('Làm sạch tạo bề mặt không hợp lệ; mô hình gốc được giữ lại.')
     cleaned.vertices=(cleaned.vertices-cleaned.bounds[0])*dimensions/cleaned.extents+bounds[0]
-    return cleaned,{'version':2,'removed_components':len(parts)-len(kept),
+    return cleaned,{'version':2,'profile':profile,'removed_components':len(parts)-len(kept),
         'faces_before':len(source.faces),'faces_after':len(cleaned.faces),'watertight':True}
 
 if __name__=='__main__':

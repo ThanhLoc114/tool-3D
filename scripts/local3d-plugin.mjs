@@ -46,16 +46,16 @@ export function local3DPlugin(){
     const parsed=new URL(req.url||'/','http://localhost'),url=parsed.pathname;
     if(url==='/ready'){const available=engines();return send(200,{ready:available.tripo||available.hunyuan,engines:available,message:available.hunyuan?'Hunyuan3D-2mini Turbo · chạy CPU trên máy · ảnh không gửi ra ngoài.':available.tripo?'TripoSR sẵn sàng. Hunyuan3D-2mini chưa hoàn tất cài đặt và kiểm chứng.':'AI cục bộ chưa sẵn sàng. Có thể nhập GLB/STL.'})}
     if(url==='/jobs'&&req.method==='POST'){
-     const engine=parsed.searchParams.get('engine')||'tripo',resolution=parsed.searchParams.get('resolution')||'255';
-     if(!['tripo','hunyuan'].includes(engine)||!['127','255'].includes(resolution))return send(400,{error:'Bộ AI hoặc chất lượng không hợp lệ.'});
+     const engine=parsed.searchParams.get('engine')||'tripo',resolution=parsed.searchParams.get('resolution')||'255',surface=parsed.searchParams.get('surface')||'balanced';
+     if(!['tripo','hunyuan'].includes(engine)||!['127','255'].includes(resolution)||!['balanced','detail'].includes(surface))return send(400,{error:'Bộ AI hoặc chất lượng không hợp lệ.'});
      if(!engines()[engine])return send(503,{error:'Bộ AI đã chọn chưa được cài đặt và kiểm chứng.'});
      if(await runningJob())return send(409,{error:'Máy chỉ xử lý một ảnh mỗi lần. Đang có tác vụ AI chạy; chờ hoàn tất hoặc dừng tác vụ đó để tạo ảnh khác.'});
      if(!['image/png','image/jpeg'].includes(req.headers['content-type']))return send(415,{error:'Chỉ nhận PNG/JPG.'});
      let total=0;const chunks=[];for await(const chunk of req){total+=chunk.length;if(total>10*1024*1024)return send(413,{error:'Ảnh vượt quá 10 MB.'});chunks.push(chunk)}
      const bytes=Buffer.concat(chunks);if(!(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))||(bytes[0]===255&&bytes[1]===216)))return send(415,{error:'Nội dung tệp không phải ảnh PNG/JPG.'});
-     const id=randomUUID(),folder=path.join(cache,id),input=path.join(folder,'input'),output=path.join(folder,'model.glb');await mkdir(folder,{recursive:true});await writeFile(input,bytes);await writeFile(path.join(folder,'engine.json'),JSON.stringify({engine,resolution}));
+     const id=randomUUID(),folder=path.join(cache,id),input=path.join(folder,'input'),output=path.join(folder,'model.glb');await mkdir(folder,{recursive:true});await writeFile(input,bytes);await writeFile(path.join(folder,'engine.json'),JSON.stringify({engine,resolution,surface}));
      const job={id,engine,startedAt:Date.now(),state:'running',message:'Đang nạp '+(engine==='hunyuan'?'Hunyuan3D-2mini':'TripoSR')+' trên máy…',folder};jobs.set(id,job);active=id;
-     const args=[path.join(root,'scripts',engine==='hunyuan'?'hunyuan-infer.py':'local3d-infer.py'),'--image',input,'--output',output];if(engine==='hunyuan')args.push('--resolution',resolution);
+     const args=[path.join(root,'scripts',engine==='hunyuan'?'hunyuan-infer.py':'local3d-infer.py'),'--image',input,'--output',output];if(engine==='hunyuan')args.push('--resolution',resolution,'--surface',surface);
      const child=spawn(pythonFor(engine),args,{cwd:root,windowsHide:true,env:{...process.env,HF_HOME:path.join(root,'.local-ai/hf-cache'),U2NET_HOME:path.join(root,'.local-ai/rembg-cache'),HF_HUB_OFFLINE:'1',HF_HUB_DISABLE_TELEMETRY:'1',HF_HUB_DISABLE_SYMLINKS_WARNING:'1',PYTHONUNBUFFERED:'1',PYTHONUTF8:'1',PYTHONIOENCODING:'utf-8'}});job.child=child;job.pid=child.pid;save(job);
      let stderr='',stdout='';child.stdout.setEncoding('utf8');child.stderr.setEncoding('utf8');
      child.stdout.on('data',data=>{stdout+=data;const lines=stdout.split('\n');stdout=lines.pop();for(const line of lines)if(line.startsWith('STATUS:')){job.message=line.slice(7).trim();save(job)}});

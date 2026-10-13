@@ -22,6 +22,7 @@ try{
  }
  const state=await request('/ready');assert.equal(state.engines.tripo,true);assert.equal(state.engines.hunyuan,false);
  assert.equal((await request('/jobs?engine=tripo&resolution=999','POST')).code,400);
+ assert.equal((await request('/jobs?engine=tripo&surface=invalid','POST')).code,400);
  assert.equal((await request('/jobs?engine=tripo','POST')).code,415);
  const orphan='11111111-1111-4111-8111-111111111111',folder=path.join(root,'.local-ai/jobs',orphan);
  await mkdir(folder,{recursive:true});await writeFile(path.join(folder,'job.json'),JSON.stringify({id:orphan,state:'running',engine:'hunyuan',pid:process.pid}));

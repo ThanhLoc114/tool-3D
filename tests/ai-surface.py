@@ -21,3 +21,11 @@ assert abs(cleaned.volume/sphere.volume-1)<.03
 rough=lambda mesh:np.std(np.linalg.norm(mesh.vertices,axis=1))
 assert rough(cleaned)<rough(sphere)*.7, 'Remeshing must reduce physical surface noise'
 print('PASS: removes a disconnected speck, reduces surface noise, preserves size/volume and one closed body.')
+
+detail,detail_report=clean_surface(source,profile="detail")
+assert detail.is_watertight and len(detail.split())==1
+assert len(detail.faces)==len(sphere.faces), "Detail mode must retain AI tessellation"
+assert np.allclose(detail.bounds,sphere.bounds,atol=1e-8)
+assert detail_report['profile']=='detail'
+assert rough(detail)<rough(sphere), "Gentle filtering must still reduce noise"
+print('PASS: detail mode keeps tessellation, closed geometry and size while filtering more gently.')
