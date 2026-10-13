@@ -21,13 +21,14 @@ export function local3DPlugin(){
  return {name:'keycraft-local-3d',configureServer(server){
   const root=server.config.root,cache=path.join(root,'.local-ai/jobs'),jobs=new Map();let active;
   const pythonFor=engine=>path.join(root,engine==='hunyuan'?'.local-ai/hunyuan-venv':'.local-ai/venv',process.platform==='win32'?'Scripts/python.exe':'bin/python');
-  function save(job){try{const file=path.join(job.folder,'job.json');writeFileSync(file+'.tmp',JSON.stringify({id:job.id,engine:job.engine,pid:job.pid,state:job.state,message:job.message}));renameSync(file+'.tmp',file)}catch(e){console.error('Cannot persist local AI status:',e.message)}}
+  function save(job){try{const file=path.join(job.folder,'job.json');writeFileSync(file+'.tmp',JSON.stringify({id:job.id,engine:job.engine,pid:job.pid,startedAt:job.startedAt,state:job.state,message:job.message}));renameSync(file+'.tmp',file)}catch(e){console.error('Cannot persist local AI status:',e.message)}}
   function getJob(id){
    if(!uuid.test(id))return null;
    let job=jobs.get(id);const folder=path.join(cache,id);
    if(!job){const saved=readJSON(path.join(folder,'job.json')),engine=readJSON(path.join(folder,'engine.json'))?.engine||'tripo';if(!saved&&!existsSync(path.join(folder,'model.glb')))return null;job={...saved,id,engine:saved?.engine||engine,folder};jobs.set(id,job)}
    if(existsSync(path.join(folder,'model.glb'))){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}
    else if(job.state==='running'&&!alive(job.pid)){job.state='failed';job.message='Tiến trình AI đã dừng trước khi hoàn tất. Tạo lại từ ảnh.';save(job)}
+   if(job.state==='failed'&&readJSON(path.join(job.folder,'job.json'))?.state==='failed'){try{if(readFileSync(path.join(job.folder,'error.log'),'utf8').includes('bề mặt chưa kín'))job.message='AI đã chạy nhưng mô hình từ ảnh này chưa kín nên không thể xuất để in. Thử ảnh rõ hơn, một vật thể riêng biệt.'}catch{}}
    return job;
   }
   async function runningJob(){if(!existsSync(cache))return null;for(const id of await readdir(cache)){if(!uuid.test(id))continue;const job=getJob(id);if(job?.state==='running'){if(await ownsProcess(job)){active=id;return id}job.state='failed';job.message='Tiến trình AI cũ không còn chạy.';save(job)}}active=null;return null}
@@ -43,19 +44,19 @@ export function local3DPlugin(){
      const engine=parsed.searchParams.get('engine')||'tripo',resolution=parsed.searchParams.get('resolution')||'255';
      if(!['tripo','hunyuan'].includes(engine)||!['127','255'].includes(resolution))return send(400,{error:'Bộ AI hoặc chất lượng không hợp lệ.'});
      if(!engines()[engine])return send(503,{error:'Bộ AI đã chọn chưa được cài đặt và kiểm chứng.'});
-     if(await runningJob())return send(409,{error:'Đã có một tác vụ AI đang chạy.'});
+     if(await runningJob())return send(409,{error:'Máy chỉ xử lý một ảnh mỗi lần. Đang có tác vụ AI chạy; chờ hoàn tất hoặc dừng tác vụ đó để tạo ảnh khác.'});
      if(!['image/png','image/jpeg'].includes(req.headers['content-type']))return send(415,{error:'Chỉ nhận PNG/JPG.'});
      let total=0;const chunks=[];for await(const chunk of req){total+=chunk.length;if(total>10*1024*1024)return send(413,{error:'Ảnh vượt quá 10 MB.'});chunks.push(chunk)}
      const bytes=Buffer.concat(chunks);if(!(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))||(bytes[0]===255&&bytes[1]===216)))return send(415,{error:'Nội dung tệp không phải ảnh PNG/JPG.'});
      const id=randomUUID(),folder=path.join(cache,id),input=path.join(folder,'input'),output=path.join(folder,'model.glb');await mkdir(folder,{recursive:true});await writeFile(input,bytes);await writeFile(path.join(folder,'engine.json'),JSON.stringify({engine,resolution}));
-     const job={id,engine,state:'running',message:'Đang nạp '+(engine==='hunyuan'?'Hunyuan3D-2mini':'TripoSR')+' trên máy…',folder};jobs.set(id,job);active=id;
+     const job={id,engine,startedAt:Date.now(),state:'running',message:'Đang nạp '+(engine==='hunyuan'?'Hunyuan3D-2mini':'TripoSR')+' trên máy…',folder};jobs.set(id,job);active=id;
      const args=[path.join(root,'scripts',engine==='hunyuan'?'hunyuan-infer.py':'local3d-infer.py'),'--image',input,'--output',output];if(engine==='hunyuan')args.push('--resolution',resolution);
      const child=spawn(pythonFor(engine),args,{cwd:root,windowsHide:true,env:{...process.env,HF_HOME:path.join(root,'.local-ai/hf-cache'),U2NET_HOME:path.join(root,'.local-ai/rembg-cache'),HF_HUB_OFFLINE:'1',HF_HUB_DISABLE_TELEMETRY:'1',HF_HUB_DISABLE_SYMLINKS_WARNING:'1',PYTHONUNBUFFERED:'1',PYTHONUTF8:'1',PYTHONIOENCODING:'utf-8'}});job.child=child;job.pid=child.pid;save(job);
      let stderr='',stdout='';child.stdout.setEncoding('utf8');child.stderr.setEncoding('utf8');
      child.stdout.on('data',data=>{stdout+=data;const lines=stdout.split('\n');stdout=lines.pop();for(const line of lines)if(line.startsWith('STATUS:')){job.message=line.slice(7).trim();save(job)}});
      child.stderr.on('data',data=>{stderr=(stderr+data).slice(-4000)});
      child.on('error',e=>{job.state='failed';job.message='Không khởi chạy được Python AI: '+e.message;if(active===id)active=null;save(job)});
-     child.on('close',async code=>{if(['cancelled','cancelling'].includes(job.state)){job.state='cancelled';job.message='Đã dừng AI.'}else if(code===0&&existsSync(output)){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}else{job.state='failed';job.message='AI chưa tạo được mô hình. Xem nhật ký tại .local-ai/jobs/'+id+'/error.log';await writeFile(path.join(folder,'error.log'),stderr)}if(active===id)active=null;save(job)});
+     child.on('close',async code=>{if(['cancelled','cancelling'].includes(job.state)){job.state='cancelled';job.message='Đã dừng AI.'}else if(code===0&&existsSync(output)){job.state='succeeded';job.message='Đã dựng vật thể 3D từ ảnh bằng AI cục bộ.'}else{job.state='failed';job.message=stderr.includes('bề mặt chưa kín')?'AI đã chạy nhưng mô hình từ ảnh này chưa kín nên không thể xuất để in. Thử ảnh rõ hơn, một vật thể riêng biệt.':'AI xử lý thất bại. Chi tiết nằm trong nhật ký .local-ai/jobs/'+id+'/error.log';await writeFile(path.join(folder,'error.log'),stderr)}if(active===id)active=null;save(job)});
      return send(202,{id});
     }
     const match=url.match(/^\/jobs\/([a-f0-9-]{36})(\/model)?$/);
@@ -69,7 +70,7 @@ export function local3DPlugin(){
      job.state='cancelled';job.message='Đã dừng AI.';if(active===job.id)active=null;save(job);return send(200,{state:job.state});
     }
     if(match[2]){if(job.state!=='succeeded')return send(409,{error:'Mô hình chưa hoàn tất.'});const report=readJSON(path.join(job.folder,'model.surface.json')),name=report?.file==='model.cleaned.glb'&&existsSync(path.join(job.folder,'model.cleaned.glb'))?'model.cleaned.glb':'model.glb';res.setHeader('Cache-Control','no-store');res.setHeader('Content-Type','model/gltf-binary');const stream=createReadStream(path.join(job.folder,name));res.on('close',()=>stream.destroy());stream.on('error',()=>res.destroy());stream.pipe(res);return}
-    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message,surfaceCleaned:(readJSON(path.join(job.folder,'model.surface.json'))?.version||0)>=1,surfaceRevision:readJSON(path.join(job.folder,'model.surface.json'))?.version||0});
+    return send(200,{id:job.id,engine:job.engine,state:job.state,message:job.message,startedAt:job.startedAt||statSync(job.folder).birthtimeMs,surfaceCleaned:(readJSON(path.join(job.folder,'model.surface.json'))?.version||0)>=1,surfaceRevision:readJSON(path.join(job.folder,'model.surface.json'))?.version||0});
    }catch(e){send(500,{error:e.message})}
   });
  }};
