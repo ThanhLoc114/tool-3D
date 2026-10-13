@@ -1,0 +1,16 @@
+torch==2.14.1+cpu
+torchvision==0.29.1+cpu
+numpy==1.26.4
+transformers==4.46.3
+diffusers==0.32.2
+accelerate==1.2.1
+omegaconf==2.3.0
+safetensors
+filelock
+PyYAML
+einops
+trimesh
+pymeshlab
+scikit-image
+rembg==2.0.57
+onnxruntime
