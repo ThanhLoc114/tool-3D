@@ -10,4 +10,10 @@ const box=new THREE.BoxGeometry(10,10,10),sharp=smoothImportedSurface(box);for(l
 const uneven=new THREE.BufferGeometry();uneven.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,4,0,0,0,4,0,0,0,0,0,1,0,-1,0,1],3));
 const weighted=smoothImportedSurface(uneven),actual=new THREE.Vector3().fromBufferAttribute(weighted.attributes.normal,0),expected=new THREE.Vector3(1,0,17).normalize();
 assert(actual.dot(expected)>.999999,'small triangles cannot dominate smooth surface normals');
+const fold=new THREE.BufferGeometry(),angle=THREE.MathUtils.degToRad(70);fold.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,-Math.cos(angle),0,Math.sin(angle)],3));
+const organic=smoothImportedSurface(fold,true),mechanical=smoothImportedSurface(fold);
+const normalAt=(g,i)=>new THREE.Vector3().fromBufferAttribute(g.attributes.normal,i);
+assert(normalAt(organic,0).dot(normalAt(organic,3))>.999999,'organic junction shares continuous normals');
+assert(normalAt(mechanical,0).dot(normalAt(mechanical,3))<.5,'mechanical crease stays sharp');
+assert.deepEqual(organic.attributes.position.array,fold.attributes.position.array,'organic shading does not change shape');
 console.log('PASS imported surface normals: smooth curves, preserve geometry and sharp edges');
